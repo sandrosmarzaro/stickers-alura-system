@@ -1,6 +1,8 @@
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -19,7 +21,7 @@ public class App {
         final String mostPopularUrl = "https://imdb-api.com/en/API/MostPopularMovies/";
         final String url = mostPopularUrl + apiKey;
 //         Alternative URL for consulting the API:
-//        final String url = "https://api.mocki.io/v2/549a5d8b";
+//        final String url = "https://alura-filmes.herokuapp.com/conteudos";
 
         HttpClient client = HttpClient.newHttpClient();
         URI uri = URI.create(url);
@@ -31,25 +33,25 @@ public class App {
         List<Map<String, String>> moviesList = parser.parse(body);
         
         clearConsole();
-        final String boldCode = "\u001b[1m";
-        final String resetCode = "\u001b[0m";
-        final String greenBackCode = "\u001b[42;1m";
-        final String whiteFontCode = "\u001b[37;1m";
         for (Map<String,String> movie : moviesList) {
-            System.out.println(boldCode + "Title: " + resetCode + movie.get("title"));
-            System.out.println(boldCode + "Poster: " + resetCode + movie.get("image"));
-            System.out.println(greenBackCode + whiteFontCode + 
-                "Rating: " + movie.get("imDbRating") + resetCode
-            );
-            int intRating = 0;
+            String imageUrl = movie.get("image");
+            boolean hasBetterImage = imageUrl.contains("._V1_");
+            if (hasBetterImage) {
+                int startIndex = imageUrl.indexOf("._V1_");
+                int endIndex = imageUrl.indexOf(".jpg");
+                imageUrl = imageUrl.replace(imageUrl.substring(startIndex, endIndex), "");
+            }
+            System.out.println("Processing title: " + movie.get("title"));
+            System.out.println();
+            InputStream inputStream;
             try {
-                intRating = (int) Math.round(Double.parseDouble(movie.get("imDbRating")));
+                inputStream = new URL(imageUrl).openStream();
             }
             catch (Exception e) {
-                System.out.println("❌");
+                System.out.println("Error reading image");
+                continue;
             }
-            System.out.println("⭐".repeat(intRating));
-            System.out.println();
+            StickerGenerator.generate(inputStream, movie.get("title") + ".png");
         }
     }
 
