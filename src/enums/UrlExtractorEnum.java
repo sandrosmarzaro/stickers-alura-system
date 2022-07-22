@@ -3,6 +3,7 @@ package enums;
 import config.PropertiesApi;
 import models.ContentExtractor;
 import models.ImdbContentExtractor;
+import models.LanguagesContentExtrator;
 import models.NasaContentExtractor;
 
 public enum UrlExtractorEnum {
@@ -20,7 +21,9 @@ public enum UrlExtractorEnum {
             new ImdbContentExtractor()),
     IMDB_MOSTPOPULAR_MOVIES("https://imdb-api.com/en/API/MostPopularMovies/" +
             new PropertiesApi().load().getProperty("imdb"),
-            new ImdbContentExtractor());
+            new ImdbContentExtractor()),
+    PROGRAMMING_LANGUAGES("http://localhost:8080/languages",
+            new LanguagesContentExtrator());
 
     private final String url;
     private final ContentExtractor contentExtractor;
