@@ -6,7 +6,7 @@ target/
 /out/
 /bin/
 !/src/assets/.gitkeep
-/src/assets/
+/src/assets/*.png
 
 ### STS ###
 .apt_generated
