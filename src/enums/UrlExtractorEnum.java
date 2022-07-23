@@ -22,7 +22,7 @@ public enum UrlExtractorEnum {
     IMDB_MOSTPOPULAR_MOVIES("https://imdb-api.com/en/API/MostPopularMovies/" +
             new PropertiesApi().load().getProperty("imdb"),
             new ImdbContentExtractor()),
-    PROGRAMMING_LANGUAGES("http://localhost:8080/languages",
+    PROGRAMMING_LANGUAGES("https://programming-languages-alura.herokuapp.com/languages/",
             new LanguagesContentExtrator());
 
     private final String url;
